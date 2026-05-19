@@ -8,7 +8,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
 
-  const generateDM = async (e) => {
+  const generateDM = async (e: any) => {
     e.preventDefault();
     if (!mySkill || !clientBio) return alert("Please fill both fields!");
 
