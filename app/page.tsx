@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function Home() {
   const [mySkill, setMySkill] = useState<string>('');
@@ -37,6 +38,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8">
+      {/* Top Navigation / About Link */}
+      <div className="max-w-4xl mx-auto flex justify-end mb-4">
+        <Link 
+          href="/about" 
+          className="text-sm font-medium text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 rounded-full px-4 py-1.5 bg-cyan-950/30 transition"
+        >
+          About this tool 💡
+        </Link>
+      </div>
+
       <main className="max-w-4xl mx-auto space-y-8">
         <section className="text-center space-y-2">
           <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
