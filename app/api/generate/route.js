@@ -1,9 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 
-// Naya SDK initialize ho raha hai, ye automatically env se key utha lega
-const ai = new GoogleGenAI();
-
 export async function POST(req) {
   try {
     const { offer, clientBio } = await req.json();
@@ -15,7 +12,10 @@ export async function POST(req) {
       );
     }
 
-    // Ekdum solid human-like prompt jaisa hume chahiye tha
+    // Naya object function ke andar create karenge taaki koi token issue na ho
+    // Aur Vercel par jo GEMINI_API_KEY daali hai, ye automatic use check karega
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
     const prompt = `You are an expert cold outreach specialist for agencies. Write a highly personalized, casual, and direct cold DM based on the following details. Do NOT use corporate jargon, fake enthusiasm, or robotic structures. Keep it under 3-4 sentences, completely conversational, making it look like a human typed it.
 
 My Agency Offer/Service: ${offer}
@@ -23,7 +23,7 @@ Prospect (Client) Bio/Info: ${clientBio}
 
 Output only the generated DM message, nothing else.`;
 
-    // Naye SDK ke mutabik ekdum sahi call
+    // Gemini 2.5 Flash model call
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       contents: prompt,
