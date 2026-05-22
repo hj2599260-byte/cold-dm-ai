@@ -82,7 +82,7 @@ export default function Home() {
               className="w-full h-32 bg-[#0f172a] border border-slate-600 rounded-xl p-4 text-slate-200 focus:outline-none focus:border-blue-500 transition"
               placeholder="e.g., An agency founder from New York who posts daily about B2B sales but has low-quality video edits..."
               value={clientBio}
-              onChange={(e) => setClientBio.target.value)}
+              onChange={(e) => setClientBio(e.target.value)}
             />
           </div>
 
