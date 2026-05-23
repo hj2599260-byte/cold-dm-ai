@@ -13,7 +13,7 @@ export async function POST(req) {
     }
 
     // 👇 HARSH BHAI IS NEECHE WAALI LINE MEIN APNI KEY PASTE KARO 👇
-    const apiKey = process.env.GEMINI_API_KEY || AIzaSyB9ZFoHkwfHFwEX7tKpetqxtaW3jZvjJS8
+    const apiKey = process.env.GEMINI_API_KEY || AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3-WEM
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
