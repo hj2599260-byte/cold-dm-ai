@@ -12,8 +12,10 @@ export async function POST(req) {
       );
     }
 
-    // Ekdum stable and standard way to initialize Gemini
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    // 👇 HARSH BHAI IS NEECHE WAALI LINE MEIN APNI KEY PASTE KARO 👇
+    const apiKey = process.env.GEMINI_API_KEY || AIzaSyB9ZFoHkwfHFwEX7tKpetqxtaW3jZvjJS8
+
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const prompt = `You are an expert cold outreach specialist for agencies. Write a highly personalized, casual, and direct cold DM based on the following details. Do NOT use corporate jargon, fake enthusiasm, or robotic structures. Keep it under 3-4 sentences, completely conversational, making it look like a human typed it.
