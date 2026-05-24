@@ -17,7 +17,7 @@ export default function Home() {
     setOutput("Generating your Cold DM... Please wait... ⏳");
 
     try {
-      const res = await fetch("/api/generate", {
+      const apikey = AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3-WEM
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ offer, clientBio }),
