@@ -17,7 +17,8 @@ export async function POST(req) {
     const { offer, clientBio } = body;
 
     // 👇 Apni naye account waali AIzaSy... key yahan is khali quotes ke beech mein paste kar do
-    const apiKey = "YAHAN_APNI_NEW_AIzaSy_WAALI_KEY_PASTE_KARO";
+    const apiKey = AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3-WEM
+    
 
     if (!apiKey || apiKey.startsWith("YAHAN_")) {
       return NextResponse.json({ error: "API Key missing in route.js" }, { status: 500 });
