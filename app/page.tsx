@@ -1,98 +1,104 @@
-"use client";
-import { useState } from "react";
+'use client';
+
+import { useState } from 'react';
 
 export default function Home() {
-  const [offer, setOffer] = useState<string>("");
-  const [clientBio, setClientBio] = useState<string>("");
-  const [output, setOutput] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [offer, setOffer] = useState('');
+  const [clientBio, setClientBio] = useState('');
+  const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleGenerate = async () => {
-    if (!offer || !clientBio) {
-      alert("Please fill both fields!");
-      return;
-    }
+  const handleGenerate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!offer || !clientBio) return;
 
     setLoading(true);
-    setOutput("Generating your Cold DM... Please wait... ⏳");
+    setResult('');
 
     try {
-      const apikey = AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3-WEM
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      // Yeh direct aapke backend api/generate/route.ts ko call karega
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ offer, clientBio }),
       });
 
-      const data = await res.json();
-      
+      const data = await response.json();
       if (data.text) {
-        setOutput(data.text);
+        setResult(data.text);
       } else if (data.error) {
-        setOutput(`Backend Error: ${data.error}`);
+        setResult(`Error: ${data.error}`);
       } else {
-        setOutput("Unexpected Response Format from server.");
+        setResult('Something went wrong.');
       }
     } catch (err: any) {
-      setOutput(`Frontend Network Error: ${err.message}`);
+      setResult(`System Error: ${err.message || 'Failed to fetch'}`);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ backgroundColor: "#0f172a", minHeight: "100vh", color: "#f8fafc", padding: "40px", fontFamily: "sans-serif" }}>
-      <div style={{ maxWidth: "900px", margin: "0 auto" }}>
-        
-        <h1 style={{ textAlign: "center", fontSize: "42px", fontWeight: "bold", color: "#22d3ee", marginBottom: "10px" }}>
+    <div className="min-h-screen bg-[#0B132B] text-white flex flex-col items-center justify-center p-6">
+      <div className="max-w-4xl w-full text-center mb-12">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-[#4CC9F0] mb-4">
           Turn Cold Outreach Into Warm Conversations
         </h1>
-        <p style={{ textAlign: "center", color: "#94a3b8", marginBottom: "40px", fontSize: "16px" }}>
+        <p className="text-gray-400 text-lg">
           Stop wasting hours writing robotic messages. Generate ultra-personalized, human-like cold DMs that actually get replies for your agency.
         </p>
-        
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "30px", backgroundColor: "#1e293b", padding: "30px", borderRadius: "12px", border: "1px solid #334155" }}>
-          
-          {/* Left Inputs */}
+      </div>
+
+      <div className="max-w-4xl w-full bg-[#1C2541] rounded-2xl p-8 shadow-xl grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Left Side: Inputs */}
+        <form onSubmit={handleGenerate} className="flex flex-col gap-6">
           <div>
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{ display: "block", fontWeight: "bold", marginBottom: "8px", color: "#94a3b8" }}>Your Agency Service / Offer</label>
-              <textarea 
-                rows={4} 
-                style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #475569", backgroundColor: "#0f172a", color: "#f8fafc", fontFamily: "sans-serif", fontSize: "14px" }}
-                placeholder="e.g., We edit high-retention short-form reels..."
-                value={offer}
-                onChange={(e) => setOffer(e.target.value)}
-              />
-            </div>
-
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{ display: "block", fontWeight: "bold", marginBottom: "8px", color: "#94a3b8" }}>Prospect (Client) Bio / Info</label>
-              <textarea 
-                rows={4} 
-                style={{ width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid #475569", backgroundColor: "#0f172a", color: "#f8fafc", fontFamily: "sans-serif", fontSize: "14px" }}
-                placeholder="e.g., A gym owner in Delhi who wants more members..."
-                value={clientBio}
-                onChange={(e) => setClientBio(e.target.value)}
-              />
-            </div>
-
-            <button 
-              onClick={handleGenerate}
-              disabled={loading}
-              style={{ width: "100%", padding: "14px", backgroundColor: "#2563eb", color: "#fff", border: "none", borderRadius: "8px", fontSize: "16px", cursor: "pointer", fontWeight: "bold", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.5)" }}
-            >
-              {loading ? "Processing..." : "Generate Human-Like DM ✨"}
-            </button>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">
+              Your Agency Service / Offer
+            </label>
+            <textarea
+              value={offer}
+              onChange={(e) => setOffer(e.target.value)}
+              placeholder="e.g., We edit high-retention short-form reels for fitness coaches..."
+              className="w-full h-32 bg-[#3A506B] text-white rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-[#4CC9F0] placeholder-gray-400 resize-none"
+            />
           </div>
 
-          {/* Right Output */}
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <label style={{ display: "block", fontWeight: "bold", marginBottom: "8px", color: "#94a3b8" }}>Generated Content</label>
-            <div style={{ flex: 1, width: "100%", minHeight: "260px", padding: "15px", backgroundColor: "#0f172a", borderRadius: "8px", border: "1px solid #475569", overflowY: "auto", whiteSpace: "pre-wrap", color: "#e2e8f0", fontSize: "14px" }}>
-              {output || "Your generated DM or system response will appear here..."}
-            </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">
+              Prospect (Client) Bio / Info
+            </label>
+            <textarea
+              value={clientBio}
+              onChange={(e) => setClientBio(e.target.value)}
+              placeholder="e.g., A premium gym owner in Mumbai who posts daily but has low engagement..."
+              className="w-full h-32 bg-[#3A506B] text-white rounded-xl p-4 focus:outline-none focus:ring-2 focus:ring-[#4CC9F0] placeholder-gray-400 resize-none"
+            />
           </div>
 
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-4 bg-[#3F37C9] hover:bg-[#4361EE] text-white font-bold rounded-xl transition-all duration-200 shadow-lg disabled:opacity-50"
+          >
+            {loading ? 'Generating...' : 'Generate Human-Like DM ✨'}
+          </button>
+        </form>
+
+        {/* Right Side: Output */}
+        <div className="flex flex-col">
+          <label className="block text-sm font-semibold text-gray-300 mb-2">
+            Generated Content
+          </label>
+          <div className="w-full h-full min-h-[300px] bg-[#0B132B] border border-[#3A506B] rounded-xl p-6 text-gray-200 overflow-y-auto whitespace-pre-wrap">
+            {result || (
+              <span className="text-gray-500 italic">
+                Your personalized cold DM will appear here...
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </div>
