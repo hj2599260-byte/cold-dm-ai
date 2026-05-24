@@ -16,10 +16,8 @@ export async function POST(req: Request) {
 
     const { offer, clientBio } = body;
 
-    // 👇 Harsh bhai, maine double quotes strictly string types ke sath lagaye hain
-    const apiKey: string = "AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3";
-
-    const genAI = new GoogleGenerativeAI(apiKey);
+    // Direct initialization bina kisi alag variable ke jisse compiler khush rahega
+    const genAI = new GoogleGenerativeAI("AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3");
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     const prompt = `Write a short conversational cold DM under 3-4 sentences.
