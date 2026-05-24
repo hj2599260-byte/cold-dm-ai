@@ -1,40 +1,46 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req) {
   try {
-    const { offer, clientBio } = await req.json();
-
-    if (!offer || !clientBio) {
+    const body = await req.json().catch(() => null);
+    
+    if (!body || !body.offer || !body.clientBio) {
       return NextResponse.json(
-        { error: "Offer and Client Bio are required" },
+        { error: "Missing fields: offer or clientBio" },
         { status: 400 }
       );
     }
 
-    // 👇 HARSH BHAI IS NEECHE WAALI LINE MEIN APNI KEY PASTE KARO 👇
-    const apiKey = process.env.GEMINI_API_KEY || AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3-WEM
+    const { offer, clientBio } = body;
+
+    // 👇 Apni naye account waali AIzaSy... key yahan is khali quotes ke beech mein paste kar do
+    const apiKey = "YAHAN_APNI_NEW_AIzaSy_WAALI_KEY_PASTE_KARO";
+
+    if (!apiKey || apiKey.startsWith("YAHAN_")) {
+      return NextResponse.json({ error: "API Key missing in route.js" }, { status: 500 });
+    }
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-    const prompt = `You are an expert cold outreach specialist for agencies. Write a highly personalized, casual, and direct cold DM based on the following details. Do NOT use corporate jargon, fake enthusiasm, or robotic structures. Keep it under 3-4 sentences, completely conversational, making it look like a human typed it.
-
-My Agency Offer/Service: ${offer}
-Prospect (Client) Bio/Info: ${clientBio}
-
-Output only the generated DM message, nothing else.`;
+    const prompt = `Write a short conversational cold DM under 3-4 sentences.
+    My Offer: ${offer}
+    Client Bio: ${clientBio}
+    Output only the message.`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const generatedText = response.text();
 
-    return NextResponse.json({ text: generatedText });
+    return NextResponse.json({ text: generatedText }, { status: 200 });
+
   } catch (error) {
-    console.error("Gemini Stable Error:", error);
     return NextResponse.json(
-      { error: "Gemini Error: " + error.message },
-      { status: 500 }
+      { text: `System Error: ${error.message || "Unknown Error"}` },
+      { status: 200 }
     );
   }
 }
