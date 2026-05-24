@@ -17,7 +17,9 @@ export async function POST(req: Request) {
     const { offer, clientBio } = body;
 
     // 🔴 HARSH BHAI, BAS IS NEECHE WAALI LINE MEIN APNI NEW KEY PASTE KAR DENA 🔴
-    const apiKey = "YAHAN_APNE_DOST_WAALI_NEW_KEY_PASTE_KARO";
+    const apiKey = "AIzaSyDOmDR8lNiCRdkEHjy1E3RLO9eaF9e5Bgo"
+    
+
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
