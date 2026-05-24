@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => null);
     
@@ -16,13 +16,8 @@ export async function POST(req) {
 
     const { offer, clientBio } = body;
 
-    // 👇 Apni naye account waali AIzaSy... key yahan is khali quotes ke beech mein paste kar do
-    const apiKey = AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3-WEM
-    
-
-    if (!apiKey || apiKey.startsWith("YAHAN_")) {
-      return NextResponse.json({ error: "API Key missing in route.js" }, { status: 500 });
-    }
+    // 👇 Harsh bhai, yahan double quotes ke andar apni real key ekdum dhyan se check karke paste karna
+    const apiKey = "AIzaSyBZn210mwMbApLLOnG1Zmr32LKzbo3";
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -38,7 +33,7 @@ export async function POST(req) {
 
     return NextResponse.json({ text: generatedText }, { status: 200 });
 
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json(
       { text: `System Error: ${error.message || "Unknown Error"}` },
       { status: 200 }
